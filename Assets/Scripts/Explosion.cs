@@ -16,7 +16,7 @@ public class Explosion : MonoBehaviour
     void Awake()
     {
         mySprite = GetComponent<SpriteRenderer>();
-        timer = 1.5f;
+        timer = 1f;
         alpha_Bool = true;
         alpha = 100;
     }

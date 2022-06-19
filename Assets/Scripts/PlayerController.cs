@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
         Move();
 
         float dist = Vector2.Distance(sun.transform.position, transform.position) - sun.transform.localScale.x;
-        if(dist <= 0.2f) GameManager.instance.Warning(true);
+        if(dist <= 0.35f) GameManager.instance.Warning(true);
         else GameManager.instance.Warning(false);
     }
 
