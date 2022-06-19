@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     [Header("Prefabs")]
     public GameObject coin;
     public GameObject explosion;
+    public GameObject bullet;
 
     [Header("Post-Processing")]
     public GameObject main, gameOver, warning;
@@ -81,6 +82,11 @@ public class GameManager : MonoBehaviour
             explosionBool[1] = false;
             StartCoroutine(ExplosionSpawn(15));
         }
+        if (survivalTime >= 120 && explosionBool[2])
+        {
+            explosionBool[2] = false;
+            StartCoroutine(BulletSpawn(15));
+        }
 
     }
     IEnumerator ExplosionSpawn(int count)
@@ -91,6 +97,31 @@ public class GameManager : MonoBehaviour
             GameObject GO = Instantiate(explosion);
             Vector2 vec = player.transform.position;
             GO.transform.position = new Vector2(Random.Range(vec.x + 2, vec.x - 2), Random.Range(vec.y + 2, vec.y - 2));
+            yield return new WaitForSeconds(0.5f);
+            i++;
+        }
+    }
+    IEnumerator BulletSpawn(int count)
+    {
+        int i = 0;
+        while (i < count)
+        {
+            GameObject GO = Instantiate(bullet);
+            Vector2 vec = bullet.transform.position;
+            int random = Random.Range(0, 2);
+            if(random == 0)
+            {
+                random = Random.Range(0, 1);
+                if(random == 0) GO.transform.position = new Vector2(player.transform.position.x-9.5f, Random.Range(-15f, 15f));
+                else GO.transform.position = new Vector2(player.transform.position.x + 9.5f, Random.Range(-15f, 15f));
+            }
+            if (random == 1)
+            {
+                random = Random.Range(0, 1);
+                if (random == 0) GO.transform.position = new Vector2(Random.Range(-15f, 15f), player.transform.position.y - 5.5f);
+                else GO.transform.position = new Vector2(Random.Range(-15f, 15f), player.transform.position.y + 5.5f);
+            }
+            GO.GetComponent<Bullet>().TargetSetting();
             yield return new WaitForSeconds(0.5f);
             i++;
         }

@@ -20,6 +20,10 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Move();
+
+        float dist = Vector2.Distance(sun.transform.position, transform.position) - sun.transform.localScale.x;
+        if(dist <= 0.2f) GameManager.instance.Warning(true);
+        else GameManager.instance.Warning(false);
     }
 
     void Move()
@@ -44,20 +48,9 @@ public class PlayerController : MonoBehaviour
 
         if (GO.CompareTag("Sun"))
         {
-
+            GameManager.instance.GameOver();
         }
 
-        if (GO.CompareTag("Corona"))
-        {
-            GameManager.instance.Warning(true);
-        }
     }
 
-    public void OnTriggerExit2D(Collider2D GO)
-    {
-        if (GO.CompareTag("Corona"))
-        {
-            GameManager.instance.Warning(false);
-        }
-    }
 }
