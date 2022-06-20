@@ -51,6 +51,23 @@ public class PlayerController : MonoBehaviour
             GameManager.instance.GameOver();
         }
 
+        
+    }
+
+    public void OnTriggerStay2D(Collider2D GO)
+    {
+        if (GO.CompareTag("BlackHole"))
+        {
+            speed = 1.5f;
+        }
+    }
+
+    public void OnTriggerExit2D(Collider2D GO)
+    {
+        if (GO.CompareTag("BlackHole"))
+        {
+            speed = 5;
+        }
     }
 
 }

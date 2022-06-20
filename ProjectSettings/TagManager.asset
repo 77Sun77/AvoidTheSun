@@ -7,14 +7,15 @@ TagManager:
   - Coin
   - Corona
   - Sun
+  - BlackHole
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
+  - MiniSun
   - 
   - 
   - 

@@ -2,31 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SunController : MonoBehaviour
-{ 
+public class MiniSun : MonoBehaviour
+{
     GameObject target;
 
     public Rigidbody2D myRigid;
 
     public float speed;
-
-    public bool isAwakening;
     void Start()
     {
         target = GameObject.Find("Player");
 
         myRigid = GetComponent<Rigidbody2D>();
 
-        speed = 0.5f;
-        limitSpeed = 0.7f;
+        speed = 4f;
     }
 
-    
     void Update()
     {
         Move();
-
-        if (!isAwakening && transform.localScale.x > 3f) transform.localScale = new Vector2(3, 3); 
     }
 
     void Move()
@@ -41,21 +35,11 @@ public class SunController : MonoBehaviour
         }
     }
 
-    float limitSpeed;
-    public void SizeUp()
+    public void OnCollisionEnter2D(Collision2D GO)
     {
-        transform.localScale += new Vector3(0.05f, 0.05f);
-
-        if (speed >= 2.5f) return;
-        if(transform.localScale.x >= limitSpeed)
+        if (GO.collider.CompareTag("Player"))
         {
-            speed += 0.25f;
-            limitSpeed += 0.2f;
+            print("»ç¸Á");
         }
-    }
-
-    public void Awakening()
-    {
-        speed = 3.5f;
     }
 }

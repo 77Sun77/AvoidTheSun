@@ -27,7 +27,7 @@ public class Explosion : MonoBehaviour
         timer -= Time.deltaTime;
         if(timer <= 0)
         {
-            if (PlayerOnTop) GameManager.instance.GameOver();
+            if (PlayerOnTop) GameManager.instance.SufferDamage();
             GameObject GO = Instantiate(explosion);
             GO.transform.position = transform.position;
             Destroy(GO, 2f);

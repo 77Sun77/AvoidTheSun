@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     GameObject player;
+    GameObject sun;
 
     public bool isPlay;
 
@@ -14,6 +16,7 @@ public class GameManager : MonoBehaviour
     public GameObject coin;
     public GameObject explosion;
     public GameObject bullet;
+    public GameObject blackHole;
 
     [Header("Post-Processing")]
     public GameObject main, gameOver, warning;
@@ -24,12 +27,15 @@ public class GameManager : MonoBehaviour
     public int point;
     float timer, coinTimer, survivalTime;
     bool isTimer;
-    List<bool> explosionBool = new List<bool>();
+    List<bool> eventBool = new List<bool>();
+
+    public int hp;
 
     void Awake()
     {
         instance = this;
         player = GameObject.Find("Player");
+        sun = GameObject.Find("Sun");
         isTimer = true;
         isPlay = false;
         for (int i=0; i<5; i++) CoinSpawn();
@@ -37,12 +43,16 @@ public class GameManager : MonoBehaviour
         timer = 3.99f;
         survivalTime = 0;
 
-        for (int i = 0; i < 5; i++) explosionBool.Add(true); // 조건식은 이벤트 개수 만큼
+        for (int i = 0; i < 5; i++) eventBool.Add(true); // 조건식은 이벤트 개수 만큼
+
+        hp = 3;
     }
 
     
     void Update()
     {
+        
+
         if (isTimer)
         {
             timer -= Time.deltaTime;
@@ -72,22 +82,57 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if(survivalTime >= 60 && explosionBool[0])
+        if(survivalTime >= 60 && eventBool[0])
         {
-            explosionBool[0] = false;
+            eventBool[0] = false;
             StartCoroutine(ExplosionSpawn(10));
         }
-        if (survivalTime >= 90 && explosionBool[1])
+        if (survivalTime >= 90 && eventBool[1])
         {
-            explosionBool[1] = false;
+            eventBool[1] = false;
             StartCoroutine(ExplosionSpawn(15));
         }
-        if (survivalTime >= 120 && explosionBool[2])
+        if (survivalTime >= 120 && eventBool[2])
         {
-            explosionBool[2] = false;
+            eventBool[2] = false;
             StartCoroutine(BulletSpawn(15));
         }
+        if (survivalTime >= 150 && eventBool[3])
+        {
+            eventBool[3] = false;
+            BlackHoleSpawn(3);
+            StartCoroutine(BulletSpawn(15));
+        }
+        if (survivalTime >= 210 && eventBool[4])
+        {
+            eventBool[4] = false;
+            BlackHoleSpawn(3);
+            StartCoroutine(ExplosionSpawn(15));
+            StartCoroutine(BulletSpawn(20));
+        }
+        if (survivalTime >= 300 && eventBool[5])
+        {
+            isPlay = false;
+            player.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+            sun.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+            sun.transform.localScale = Vector2.Lerp(sun.transform.localScale, new Vector2(6f, 6f), 1f * Time.deltaTime);
+            Vector3 sunPos = new Vector3(sun.transform.position.x, sun.transform.position.y, -10);
+            Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, sunPos, 5f * Time.deltaTime);
+            sun.GetComponent<SunController>().isAwakening = true;
+            sun.GetComponent<SunController>().speed = 0;
+            if(Vector2.Distance(sun.transform.localScale, new Vector2(6f, 6f)) < 0.1f)
+            {
+                eventBool[5] = false;
+                isPlay = true;
+                Camera.main.transform.localPosition = new Vector3(0, 0, -10);
+                sun.GetComponent<SunController>().Awakening();
+            }
+        }
 
+
+        if (hp <= 2) hp_Images[0].GetComponent<Image>().color = new Color(0, 0, 0);
+        if (hp <= 1) hp_Images[1].GetComponent<Image>().color = new Color(0, 0, 0);
+        if (hp <= 0) hp_Images[2].GetComponent<Image>().color = new Color(0, 0, 0);
     }
     IEnumerator ExplosionSpawn(int count)
     {
@@ -126,9 +171,18 @@ public class GameManager : MonoBehaviour
             i++;
         }
     }
+    void BlackHoleSpawn(int count)
+    {
+        for(int i=0; i<count; i++)
+        {
+            GameObject GO = Instantiate(blackHole);
+            GO.transform.position = new Vector2(Random.Range(-14.5f, 14.5f), Random.Range(-14.5f, 14.5f));
+        }
+    }
 
     void CoinSpawn()
     {
+        if (GameObject.FindGameObjectsWithTag("Coin").Length >= 30) return;
         GameObject go = Instantiate(coin);
         go.transform.position = new Vector2(Random.Range(-14.5f, 14.5f), Random.Range(-14.5f, 14.5f));
     }
@@ -139,8 +193,17 @@ public class GameManager : MonoBehaviour
         warning.SetActive(isActive);
     }
 
+    public GameObject[] hp_Images;
+    public void SufferDamage()
+    {
+        hp -= 1;
+        if (hp <= 0) GameOver();
+    }
     public void GameOver()
     {
         print("게임 오버");
+        hp_Images[0].GetComponent<Image>().color = new Color(0, 0, 0);
+        hp_Images[1].GetComponent<Image>().color = new Color(0, 0, 0);
+        hp_Images[2].GetComponent<Image>().color = new Color(0, 0, 0);
     }
 }

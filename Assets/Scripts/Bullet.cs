@@ -27,7 +27,7 @@ public class Bullet : MonoBehaviour
     {
         if (GO.CompareTag("Player"))
         {
-            GameManager.instance.GameOver();
+            GameManager.instance.SufferDamage();
             Destroy(gameObject);
         }
     }
