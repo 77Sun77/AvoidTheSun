@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -43,7 +44,7 @@ public class GameManager : MonoBehaviour
         timer = 3.99f;
         survivalTime = 0;
 
-        for (int i = 0; i < 5; i++) eventBool.Add(true); // 조건식은 이벤트 개수 만큼
+        for (int i = 0; i < 17; i++) eventBool.Add(true); // 조건식은 이벤트 개수 만큼
 
         hp = 3;
     }
@@ -51,7 +52,7 @@ public class GameManager : MonoBehaviour
     
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.K)) Time.timeScale = 1;
 
         if (isTimer)
         {
@@ -110,7 +111,18 @@ public class GameManager : MonoBehaviour
             StartCoroutine(ExplosionSpawn(15));
             StartCoroutine(BulletSpawn(20));
         }
-        if (survivalTime >= 300 && eventBool[5])
+        if (survivalTime >= 240 && eventBool[5])
+        {
+            eventBool[5] = false;
+            StartCoroutine(ExplosionSpawn(15));
+            StartCoroutine(ExplosionSpawn(15));
+        }
+        if(survivalTime >= 270 && eventBool[6])
+        {
+            eventBool[6] = false;
+            StartCoroutine(BulletSpawn(50));
+        }
+        if (survivalTime >= 300 && eventBool[7])
         {
             isPlay = false;
             player.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
@@ -122,13 +134,128 @@ public class GameManager : MonoBehaviour
             sun.GetComponent<SunController>().speed = 0;
             if(Vector2.Distance(sun.transform.localScale, new Vector2(6f, 6f)) < 0.1f)
             {
-                eventBool[5] = false;
+                eventBool[7] = false;
                 isPlay = true;
                 Camera.main.transform.localPosition = new Vector3(0, 0, -10);
                 sun.GetComponent<SunController>().Awakening();
             }
         }
-
+        if (survivalTime >= 330 && eventBool[8])
+        {
+            eventBool[8] = false;
+            BlackHoleSpawn(3);
+            StartCoroutine(ExplosionSpawn(15));
+            StartCoroutine(BulletSpawn(20));
+        }
+        if (survivalTime >= 360 && eventBool[9])
+        {
+            eventBool[9] = false;
+            for(int y=-15; y<=15; y += 30)
+            {
+                for (int x = -15; x <= 15; x += 5)
+                {
+                    GameObject GO = Instantiate(bullet);
+                    GO.transform.position = new Vector2(x, y);
+                    GO.GetComponent<Bullet>().TargetSetting();
+                }
+            }
+            for (int x = -15; x <= 15; x += 30)
+            {
+                for (int y = -15; y <= 15; y += 5)
+                {
+                    GameObject GO = Instantiate(bullet);
+                    GO.transform.position = new Vector2(x, y);
+                    GO.GetComponent<Bullet>().TargetSetting();
+                }
+            }
+        }
+        if (survivalTime >= 365 && eventBool[10])
+        {
+            eventBool[10] = false;
+            for (int y = -15; y <= 15; y += 30)
+            {
+                for (int x = -15; x <= 15; x += 5)
+                {
+                    GameObject GO = Instantiate(bullet);
+                    GO.transform.position = new Vector2(x, y);
+                    GO.GetComponent<Bullet>().TargetSetting();
+                }
+            }
+            for (int x = -15; x <= 15; x += 30)
+            {
+                for (int y = -15; y <= 15; y += 5)
+                {
+                    GameObject GO = Instantiate(bullet);
+                    GO.transform.position = new Vector2(x, y);
+                    GO.GetComponent<Bullet>().TargetSetting();
+                }
+            }
+        }
+        if (survivalTime >= 370 && eventBool[11])
+        {
+            eventBool[11] = false;
+            for (int y = -15; y <= 15; y += 30)
+            {
+                for (int x = -15; x <= 15; x += 5)
+                {
+                    GameObject GO = Instantiate(bullet);
+                    GO.transform.position = new Vector2(x, y);
+                    GO.GetComponent<Bullet>().TargetSetting();
+                }
+            }
+            for (int x = -15; x <= 15; x += 30)
+            {
+                for (int y = -15; y <= 15; y += 5)
+                {
+                    GameObject GO = Instantiate(bullet);
+                    GO.transform.position = new Vector2(x, y);
+                    GO.GetComponent<Bullet>().TargetSetting();
+                }
+            }
+        }
+        if (survivalTime >= 390 && eventBool[12])
+        {
+            eventBool[12] = false;
+            StartCoroutine(ExplosionSpawn(50));
+            StartCoroutine(ExplosionSpawn(50));
+            StartCoroutine(BulletSpawn(50));
+            StartCoroutine(BulletSpawn(50));
+        }
+        if (survivalTime >= 420 && eventBool[13])
+        {
+            eventBool[13] = false;
+            StartCoroutine(ExplosionSpawn(0));
+        }
+        if (survivalTime >= 450 && eventBool[14])
+        {
+            eventBool[14] = false;
+            StartCoroutine(BulletSpawn(0));
+        }
+        if (survivalTime >= 510 && eventBool[15])
+        {
+            eventBool[15] = false;
+            StartCoroutine(ExplosionSpawn(0));
+            StartCoroutine(BulletSpawn(0));
+        }
+        if (survivalTime >= 570 && eventBool[15])
+        {
+            eventBool[15] = false;
+            StartCoroutine(ExplosionSpawn(0));
+            StartCoroutine(BulletSpawn(0));
+        }
+        if(survivalTime >= 600 && eventBool[16])
+        {
+            eventBool[16] = false;
+            for (int y = -15; y <= 15; y += 30)
+            {
+                for (int x = -15; x <= 15; x += 5)
+                {
+                    GameObject GO = Instantiate(bullet);
+                    GO.transform.position = new Vector2(x, y);
+                    GO.GetComponent<Bullet>().TargetSetting();
+                }
+            }
+        }
 
         if (hp <= 2) hp_Images[0].GetComponent<Image>().color = new Color(0, 0, 0);
         if (hp <= 1) hp_Images[1].GetComponent<Image>().color = new Color(0, 0, 0);
@@ -144,6 +271,7 @@ public class GameManager : MonoBehaviour
             GO.transform.position = new Vector2(Random.Range(vec.x + 2, vec.x - 2), Random.Range(vec.y + 2, vec.y - 2));
             yield return new WaitForSeconds(0.5f);
             i++;
+            if (count == 0) i = 0;
         }
     }
     IEnumerator BulletSpawn(int count)
@@ -152,7 +280,6 @@ public class GameManager : MonoBehaviour
         while (i < count)
         {
             GameObject GO = Instantiate(bullet);
-            Vector2 vec = bullet.transform.position;
             int random = Random.Range(0, 2);
             if(random == 0)
             {
@@ -169,7 +296,9 @@ public class GameManager : MonoBehaviour
             GO.GetComponent<Bullet>().TargetSetting();
             yield return new WaitForSeconds(0.5f);
             i++;
+            if (count == 0) i = 0;
         }
+
     }
     void BlackHoleSpawn(int count)
     {
@@ -199,11 +328,24 @@ public class GameManager : MonoBehaviour
         hp -= 1;
         if (hp <= 0) GameOver();
     }
+
+    public GameObject gameOver_UI;
     public void GameOver()
     {
         print("게임 오버");
+        isPlay = false;
+        Destroy(player.transform.Find("Core").gameObject);
+        gameOver_UI.SetActive(true);
+        gameOver_UI.transform.Find("ScoreText").GetComponent<TextMeshProUGUI>().text = "Score:" + (point + ((int)survivalTime * 10));
+        gameOver.SetActive(true);
+        player.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+        sun.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
         hp_Images[0].GetComponent<Image>().color = new Color(0, 0, 0);
         hp_Images[1].GetComponent<Image>().color = new Color(0, 0, 0);
         hp_Images[2].GetComponent<Image>().color = new Color(0, 0, 0);
+    }
+    public void ReStart()
+    {
+        SceneManager.LoadScene("PlayScene");
     }
 }
