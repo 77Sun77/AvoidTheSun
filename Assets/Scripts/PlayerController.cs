@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour
         {
             GameManager.instance.point += 100;
             sun.SizeUp();
+            GO.GetComponent<Coin>().On_Sound();
             Destroy(GO.gameObject);
         }
 

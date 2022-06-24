@@ -323,10 +323,13 @@ public class GameManager : MonoBehaviour
     }
 
     public GameObject[] hp_Images;
+    public GameObject hit_Object;
     public void SufferDamage()
     {
         hp -= 1;
         if (hp <= 0) GameOver();
+        GameObject go = Instantiate(hit_Object, player.transform);
+        Destroy(go, 2f);
     }
 
     public GameObject gameOver_UI;
