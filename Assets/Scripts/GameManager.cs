@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
         instance = this;
         player = GameObject.Find("Player");
         sun = GameObject.Find("Sun");
-        isTimer = true;
+        isTimer = false;
         isPlay = false;
         for (int i=0; i<5; i++) CoinSpawn();
         coinTimer = 10;
@@ -47,6 +47,8 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 17; i++) eventBool.Add(true); // 조건식은 이벤트 개수 만큼
 
         hp = 3;
+
+        if (isReStart) GameStart();
     }
 
     
@@ -347,8 +349,18 @@ public class GameManager : MonoBehaviour
         hp_Images[1].GetComponent<Image>().color = new Color(0, 0, 0);
         hp_Images[2].GetComponent<Image>().color = new Color(0, 0, 0);
     }
+
+    public GameObject First_GO;
+    public void GameStart()
+    {
+        First_GO.SetActive(false);
+        TimerText.gameObject.SetActive(true);
+        isTimer = true;
+    }
+    public static bool isReStart;
     public void ReStart()
     {
+        isReStart = true;
         SceneManager.LoadScene("PlayScene");
     }
 }
